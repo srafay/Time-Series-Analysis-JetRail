@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt  # For plotting graphs
 from sklearn.metrics import mean_squared_error as MSE
 from math import sqrt
+from statsmodels.tsa.api import SimpleExpSmoothing
 
 # Load Dataset
 train=pd.read_csv("data/Train_SU63ISt.csv")
@@ -41,9 +42,10 @@ plt.ylabel('Passenger count')
 plt.legend(loc='best')
 plt.show()
 
+rmse = pd.DataFrame(columns=['Method', 'RMSE'])
+
 # Calculate RMSE for Naive method
-rmse_Naive = sqrt(MSE(valid.Count, y_hat.Count))
-print ("RMSE for Naive method is {}" .format(rmse_Naive))
+rmse.loc[len(rmse)]="Naive", sqrt(MSE(valid.Count, y_hat.Count))
 
 
 # Moving Average Method to predict time series
@@ -51,20 +53,17 @@ print ("RMSE for Naive method is {}" .format(rmse_Naive))
 # last 10 days
 y_hat['Count'] = train['Count'].rolling(10).mean().iloc[-1]
 # Calculate RMSE for Moving average 10 days
-rmse_MV_10 = sqrt(MSE(valid.Count, y_hat.Count))
-print ("RMSE for 10 days moving avg is {}" .format(rmse_MV_10))
+rmse.loc[len(rmse)]="Moving Average 10D", sqrt(MSE(valid.Count, y_hat.Count))
 
 # last 20 days
 y_hat['Count'] = train['Count'].rolling(20).mean().iloc[-1]
 # Calculate RMSE for Moving average 20 days
-rmse_MV_20 = sqrt(MSE(valid.Count, y_hat.Count))
-print ("RMSE for 20 days moving avg is {}" .format(rmse_MV_20))
+rmse.loc[len(rmse)]="Moving Average 20D", sqrt(MSE(valid.Count, y_hat.Count))
 
 # last 50 days
 y_hat['Count'] = train['Count'].rolling(50).mean().iloc[-1]
 # Calculate RMSE for Moving average 50 days
-rmse_MV_50 = sqrt(MSE(valid.Count, y_hat.Count))
-print ("RMSE for 50 days moving avg is {}" .format(rmse_MV_50))
+rmse.loc[len(rmse)]="Moving Average 50D", sqrt(MSE(valid.Count, y_hat.Count))
 
 # RMSE of 10 days is better than 20 and 50 days
 # Thus predictions are getting weaker as we increase number of observations
@@ -80,9 +79,37 @@ plt.legend(loc='best')
 plt.show()
 
 
+# Simple Exponential Smoothing to predict time series
 
-train_X = train.iloc[:, 0]
-train_y = train.iloc[:, 1]
+y_hat = valid.copy()
+fit1 = SimpleExpSmoothing(train['Count']).fit(smoothing_level=0.1, optimized=False)
+y_hat['Count'] = fit1.forecast(len(valid)+1)
+# Calculate RMSE for SES 0.1
+rmse.loc[len(rmse)]="Simple Exp Smoothing 0.1", sqrt(MSE(valid.Count, y_hat.Count))
 
-valid_X = valid.iloc[:, 0]
-valid_y = valid.iloc[:, 1]
+fit1 = SimpleExpSmoothing(train['Count']).fit(smoothing_level=0.2, optimized=False)
+y_hat['Count'] = fit1.forecast(len(valid)+1)
+# Calculate RMSE for SES 0.2
+rmse.loc[len(rmse)]="Simple Exp Smoothing 0.2", sqrt(MSE(valid.Count, y_hat.Count))
+
+fit1 = SimpleExpSmoothing(train['Count']).fit(smoothing_level=0.6, optimized=False)
+y_hat['Count'] = fit1.forecast(len(valid)+1)
+# Calculate RMSE for SES 0.6
+rmse.loc[len(rmse)]="Simple Exp Smoothing 0.6", sqrt(MSE(valid.Count, y_hat.Count))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
