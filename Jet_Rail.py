@@ -1,9 +1,7 @@
 import pandas as pd
-import numpy as np          # For mathematical calculations
 import matplotlib.pyplot as plt  # For plotting graphs
-from datetime import datetime    # To access datetime
-from pandas import Series        # To work on series
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error as MSE
+from math import sqrt
 
 # Load Dataset
 train=pd.read_csv("data/Train_SU63ISt.csv")
@@ -42,6 +40,12 @@ plt.xlabel('Datetime')
 plt.ylabel('Passenger count')
 plt.legend(loc='best')
 plt.show()
+
+# Calculate RMSE for Naive method
+rmse_Naive = sqrt(MSE(valid.Count, y_hat.Count))
+print ("RMSE for Naive method is {}" .format(rmse_Naive))
+
+
 
 train_X = train.iloc[:, 0]
 train_y = train.iloc[:, 1]
