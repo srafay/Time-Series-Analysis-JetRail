@@ -97,7 +97,15 @@ y_hat['Count'] = fit1.forecast(len(valid)+1)
 # Calculate RMSE for SES 0.6
 rmse.loc[len(rmse)]="Simple Exp Smoothing 0.6", sqrt(MSE(valid.Count, y_hat.Count))
 
-
+# Visualize Simple Exp Smoothing predictions with smoothing const of 0.2
+plt.figure(figsize=(40,20))
+plt.plot(train.Datetime, train['Count'], label='train')
+plt.plot(valid.Datetime, valid['Count'], label='validation')
+plt.plot(y_hat.Datetime, y_hat['Count'], label='Simple Exp Smoothing forecast')
+plt.xlabel('Datetime')
+plt.ylabel('Passenger count')
+plt.legend(loc='best')
+plt.show()
 
 
 
