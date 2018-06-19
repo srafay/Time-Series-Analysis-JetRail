@@ -46,6 +46,30 @@ rmse_Naive = sqrt(MSE(valid.Count, y_hat.Count))
 print ("RMSE for Naive method is {}" .format(rmse_Naive))
 
 
+# Moving Average Method to predict time series
+
+# last 10 days
+y_hat['Count'] = train['Count'].rolling(10).mean().iloc[-1]
+# Calculate RMSE for Moving average 10 days
+rmse_MV_10 = sqrt(MSE(valid.Count, y_hat.Count))
+print ("RMSE for 10 days moving avg is {}" .format(rmse_MV_10))
+
+# last 20 days
+y_hat['Count'] = train['Count'].rolling(20).mean().iloc[-1]
+# Calculate RMSE for Moving average 20 days
+rmse_MV_20 = sqrt(MSE(valid.Count, y_hat.Count))
+print ("RMSE for 20 days moving avg is {}" .format(rmse_MV_20))
+
+# last 50 days
+y_hat['Count'] = train['Count'].rolling(50).mean().iloc[-1]
+# Calculate RMSE for Moving average 50 days
+rmse_MV_50 = sqrt(MSE(valid.Count, y_hat.Count))
+print ("RMSE for 50 days moving avg is {}" .format(rmse_MV_50))
+
+# RMSE of 10 days is better than 20 and 50 days
+# Thus predictions are getting weaker as we increase number of observations
+
+
 
 train_X = train.iloc[:, 0]
 train_y = train.iloc[:, 1]
