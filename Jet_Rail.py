@@ -69,6 +69,16 @@ print ("RMSE for 50 days moving avg is {}" .format(rmse_MV_50))
 # RMSE of 10 days is better than 20 and 50 days
 # Thus predictions are getting weaker as we increase number of observations
 
+# Visualize Moving Average predictions with window size of 10 days
+plt.figure(figsize=(40,20))
+plt.plot(train.Datetime, train['Count'], label='train')
+plt.plot(valid.Datetime, valid['Count'], label='validation')
+plt.plot(y_hat.Datetime, y_hat['Count'], label='Moving average 10 days forecast')
+plt.xlabel('Datetime')
+plt.ylabel('Passenger count')
+plt.legend(loc='best')
+plt.show()
+
 
 
 train_X = train.iloc[:, 0]
