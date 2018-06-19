@@ -18,9 +18,10 @@ test['Datetime'] = pd.to_datetime(test.Datetime,format='%d-%m-%Y %H:%M')
 valid = train.iloc[15287:18287, :]
 train = train.iloc[0:15286, :]
 
-# Visualize trainin-validation split
-train.Count.plot(figsize=(20,8), title= 'Daily Ridership', fontsize=14, label='train')
-valid.Count.plot(figsize=(20,8), title= 'Daily Ridership', fontsize=14, label='valid')
+# Visualize trainin-validation data split
+plt.figure(figsize=(20,8))
+plt.plot(train.Datetime, train['Count'], label='train')
+plt.plot(valid.Datetime, valid['Count'], label='validation')
 plt.xlabel("Datetime")
 plt.ylabel("Passenger count")
 plt.legend(loc='best')
