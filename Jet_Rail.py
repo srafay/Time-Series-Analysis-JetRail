@@ -19,7 +19,7 @@ valid = train.iloc[15287:18287, :]
 train = train.iloc[0:15286, :]
 
 # Visualize trainin-validation data split
-plt.figure(figsize=(20,8))
+plt.figure(figsize=(40,20))
 plt.plot(train.Datetime, train['Count'], label='train')
 plt.plot(valid.Datetime, valid['Count'], label='validation')
 plt.xlabel("Datetime")
@@ -27,6 +27,21 @@ plt.ylabel("Passenger count")
 plt.legend(loc='best')
 plt.show()
 
+
+# Naive method to predict time series
+y_hat = valid.copy()
+# Assume that all next values will be the same as last observed value
+y_hat['Count'] = train['Count'][len(train)-1]
+
+# Visualize Naive method predictions
+plt.figure(figsize=(40,20))
+plt.plot(train.Datetime, train['Count'], label='train')
+plt.plot(valid.Datetime, valid['Count'], label='validation')
+plt.plot(y_hat.Datetime, y_hat['Count'], label='Naive Forecast')
+plt.xlabel('Datetime')
+plt.ylabel('Passenger count')
+plt.legend(loc='best')
+plt.show()
 
 train_X = train.iloc[:, 0]
 train_y = train.iloc[:, 1]
