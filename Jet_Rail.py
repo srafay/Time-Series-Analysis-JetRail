@@ -174,6 +174,16 @@ plt.legend(loc='best')
 plt.show()
 
 
+# Submission using Holts Winter model
+submission=pd.read_csv("data/Sample_Submission_QChS6c3.csv")
+fit1 = ExponentialSmoothing(np.asarray(train['Count']) ,seasonal_periods=7 ,trend='add', seasonal='add',).fit()
+predict=fit1.forecast(len(test))
+submission['ID'] = test['ID']
+submission['Count'] = predict
+
+# Converting the final submission to csv format
+submission.to_csv("submissions/2.csv", index=False)
+
 
 
 
