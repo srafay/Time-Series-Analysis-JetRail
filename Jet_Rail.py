@@ -124,7 +124,7 @@ plt.show()
 # We can see that the trend is increasing
 # Thus Holt's linear trend model will perform better than above methods
 
-fit1 = Holt(np.asarray(train['Count'])).fit(smoothing_level = 0.1,smoothing_slope = 0.0001)
+fit1 = Holt(train['Count']).fit(smoothing_level = 0.1,smoothing_slope = 0.0001)
 y_hat['Count'] = fit1.forecast(len(valid))
 
 # Calculate RMSE for Holt's Linear Trending Model
@@ -141,10 +141,15 @@ plt.legend(loc='best')
 plt.show()
 
 
+# Submission using Holts Linear Trending model
+submission=pd.read_csv("data/Sample_Submission_QChS6c3.csv")
+fit1 = Holt(np.asarray(train['Count'])).fit(smoothing_level = 0.1,smoothing_slope = 0.0001)
+predict=fit1.forecast(len(test))
+submission['ID'] = test['ID']
+submission['Count'] = predict
 
-
-
-
+# Converting the final submission to csv format
+submission.to_csv("submissions/1.csv", index=False)
 
 
 
