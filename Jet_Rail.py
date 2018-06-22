@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt  # For plotting graphs
 from sklearn.metrics import mean_squared_error as MSE
 from math import sqrt
-from statsmodels.tsa.api import SimpleExpSmoothing
+from statsmodels.tsa.api import SimpleExpSmoothing, Holt
 import statsmodels.api as sm
 import numpy as np
 
@@ -121,13 +121,14 @@ result = sm.tsa.stattools.adfuller(train['Count'])
 plt.show()
 
 
+# We can see that the trend is increasing
+# Thus Holt's linear trend model will perform better than above methods
 
+fit1 = Holt(np.asarray(train['Count'])).fit(smoothing_level = 0.1,smoothing_slope = 0.0001)
+y_hat['Count'] = fit1.forecast(len(valid))
 
-
-
-
-
-
+# Calculate RMSE for Holt's Linear Trending Model
+rmse.loc[len(rmse)]="Holt's Linear Trend 0.0001", sqrt(MSE(valid.Count, y_hat.Count))
 
 
 
