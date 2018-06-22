@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt  # For plotting graphs
 from sklearn.metrics import mean_squared_error as MSE
 from math import sqrt
 from statsmodels.tsa.api import SimpleExpSmoothing
+import statsmodels.api as sm
+import numpy as np
 
 # Load Dataset
 train=pd.read_csv("data/Train_SU63ISt.csv")
@@ -106,6 +108,39 @@ plt.xlabel('Datetime')
 plt.ylabel('Passenger count')
 plt.legend(loc='best')
 plt.show()
+
+
+
+# Holt's Linear Trend Model to predcit time series
+
+# Similar to SES but also takes trend into account
+
+# Visualize the trend in data
+sm.tsa.seasonal_decompose(np.asarray(train['Count']), freq=3).plot()
+result = sm.tsa.stattools.adfuller(train['Count'])
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
