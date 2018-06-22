@@ -130,7 +130,15 @@ y_hat['Count'] = fit1.forecast(len(valid))
 # Calculate RMSE for Holt's Linear Trending Model
 rmse.loc[len(rmse)]="Holt's Linear Trend 0.0001", sqrt(MSE(valid.Count, y_hat.Count))
 
-
+# Visualize Holt's predictions
+plt.figure(figsize=(40,20))
+plt.plot(train.Datetime, train['Count'], label='train')
+plt.plot(valid.Datetime, valid['Count'], label='validation')
+plt.plot(y_hat.Datetime, y_hat['Count'], label='Holts Linear Trending Forecast')
+plt.xlabel('Datetime')
+plt.ylabel('Passenger count')
+plt.legend(loc='best')
+plt.show()
 
 
 
