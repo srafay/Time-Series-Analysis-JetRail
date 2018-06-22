@@ -163,6 +163,16 @@ y_hat['Count'] = fit1.forecast(len(valid))
 
 rmse.loc[len(rmse)]="Holt's Winter Model @7", sqrt(MSE(valid.Count, y_hat.Count))
 
+# Visualize Holt Winter model predictions
+plt.figure(figsize=(40,20))
+plt.plot(train.Datetime, train['Count'], label='train')
+plt.plot(valid.Datetime, valid['Count'], label='validation')
+plt.plot(y_hat.Datetime, y_hat['Count'], label='Holts Winter Model Forecast')
+plt.xlabel('Datetime')
+plt.ylabel('Passenger count')
+plt.legend(loc='best')
+plt.show()
+
 
 
 
