@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt  # For plotting graphs
 from sklearn.metrics import mean_squared_error as MSE
 from math import sqrt
 from statsmodels.tsa.api import SimpleExpSmoothing, Holt
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
 import statsmodels.api as sm
 import numpy as np
 
@@ -116,7 +117,7 @@ plt.show()
 # Similar to SES but also takes trend into account
 
 # Visualize the trend in data
-sm.tsa.seasonal_decompose(np.asarray(train['Count']), freq=3).plot()
+sm.tsa.seasonal_decompose(np.asarray(train['Count']), freq=7).plot()
 result = sm.tsa.stattools.adfuller(train['Count'])
 plt.show()
 
@@ -151,6 +152,16 @@ submission['Count'] = predict
 # Converting the final submission to csv format
 submission.to_csv("submissions/1.csv", index=False)
 
+
+
+# Holt's Winter Model to predict time series
+
+# Takes into account both Seasonality and Trend
+
+fit1 = ExponentialSmoothing(np.asarray(train['Count']) ,seasonal_periods=7 ,trend='add', seasonal='add',).fit()
+y_hat['Count'] = fit1.forecast(len(valid))
+
+rmse.loc[len(rmse)]="Holt's Winter Model @7", sqrt(MSE(valid.Count, y_hat.Count))
 
 
 
