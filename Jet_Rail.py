@@ -17,8 +17,8 @@ train = train.drop(['ID'],axis=1)
 train['Datetime'] = pd.to_datetime(train.Datetime,format='%d-%m-%Y %H:%M') 
 test['Datetime'] = pd.to_datetime(test.Datetime,format='%d-%m-%Y %H:%M') 
 
-valid = train.iloc[15287:18287, :]
-train = train.iloc[0:15286, :]
+valid = train.iloc[16056:18287, :]
+train = train.iloc[0:16055, :]
 
 # Visualize trainin-validation data split
 plt.figure(figsize=(40,20))
@@ -161,7 +161,7 @@ submission.to_csv("submissions/1.csv", index=False)
 fit1 = ExponentialSmoothing(np.asarray(train['Count']) ,seasonal_periods=7 ,trend='add', seasonal='add',).fit()
 y_hat['Count'] = fit1.forecast(len(valid))
 
-rmse.loc[len(rmse)]="Holt's Winter Model @7", sqrt(MSE(valid.Count, y_hat.Count))
+rmse.loc[len(rmse)]="Holt's Winter Model @@7", sqrt(MSE(valid.Count, y_hat.Count))
 
 # Visualize Holt Winter model predictions
 plt.figure(figsize=(40,20))
@@ -186,8 +186,10 @@ submission.to_csv("submissions/2.csv", index=False)
 
 
 
+# SARIMAX Model to predict time series
 
-
+fit1 = sm.tsa.statespace.SARIMAX(np.asarray(train['Count']), order=(2, 1, 4),seasonal_order=(0,1,1,7)).fit()
+y_hat['Count'] = fit1.predict(start='2014-06-25 00:00:00', end="2014-9-25", dynamic=False)
 
 
 
