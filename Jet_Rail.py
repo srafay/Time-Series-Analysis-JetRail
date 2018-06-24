@@ -224,7 +224,6 @@ test_stationarity(train['Count'])
 # Since Test stats < Critical value, Series is stationary
 # But we can see the increasing trend, let's remove it first
 
-
 Train_log = np.log(train['Count'])
 valid_log = np.log(valid['Count'])
 
@@ -328,12 +327,21 @@ plt.legend(loc='best')
 plt.show()
 
 
+# Convert the values to original scale and plot the validation curve for AR Model
+
+AR_predict=results_AR.predict(start=16055, end=18285)
+AR_predict=AR_predict.cumsum().shift().fillna(0)
+AR_predict1=pd.Series(np.ones(valid.shape[0]) * np.log(valid['Count']), index = valid.index)
+AR_predict1=AR_predict1.add(AR_predict,fill_value=0)
+AR_predict = np.exp(AR_predict1)
 
 
-
-
-
-
+plt.figure(figsize=(50,20))
+plt.plot(valid['Count'], label = "Valid")
+plt.plot(AR_predict, color = 'red', label = "Predict")
+plt.legend(loc= 'best')
+plt.title("Validation Curve Using Auto Regression Model")
+plt.show()
 
 
 
