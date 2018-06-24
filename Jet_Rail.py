@@ -317,6 +317,15 @@ plt.axhline(y=1.96/np.sqrt(len(train_log_diff.dropna())),linestyle='--',color='g
 plt.title('Partial Autocorrelation Function')
 plt.show()
 
+# Make AR Model
+model = ARIMA(Train_log, order=(1, 1, 0))  # here the q value is zero since it is just the AR model
+results_AR = model.fit(disp=-1)  
+plt.figure(figsize=(50,10))
+plt.plot(train_log_diff.dropna(), label='original')
+plt.plot(results_AR.fittedvalues, color='red', label='predictions')
+plt.title('Predictions using Auto Regression Model')
+plt.legend(loc='best')
+plt.show()
 
 
 
