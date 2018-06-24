@@ -4,7 +4,8 @@ from sklearn.metrics import mean_squared_error as MSE
 from math import sqrt
 from statsmodels.tsa.api import SimpleExpSmoothing, Holt
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
-from statsmodels.tsa.stattools import adfuller
+from statsmodels.tsa.stattools import adfuller # for Dickey Fuller test
+from statsmodels.tsa.seasonal import seasonal_decompose 
 import statsmodels.api as sm
 import numpy as np
 
@@ -186,10 +187,6 @@ submission['Count'] = predict
 submission.to_csv("submissions/2.csv", index=False)
 
 
-
-# ARIMA Model to predict time series
-
-# Need to make the series stationary first
 # Use Dickey Fuller test to check stationarity of the series
 
 # Null Hypothesis: Time series is not stationary
@@ -262,8 +259,29 @@ test_stationarity(train_log_diff.dropna())
 
 
 
+# Removing Seasonality
 
+decomposition = seasonal_decompose(pd.DataFrame(Train_log).Count.values, freq = 24)
 
+trend = decomposition.trend
+seasonal = decomposition.seasonal
+residual = decomposition.resid
+
+plt.figure(figsize=(50,10))
+plt.subplot(411)
+plt.plot(train.Datetime, Train_log, label='Original')
+plt.legend(loc='best')
+plt.subplot(412)
+plt.plot(train.Datetime, trend, label='Trend')
+plt.legend(loc='best')
+plt.subplot(413)
+plt.plot(train.Datetime, seasonal,label='Seasonality')
+plt.legend(loc='best')
+plt.subplot(414)
+plt.plot(train.Datetime, residual, label='Residuals')
+plt.legend(loc='best')
+plt.tight_layout()
+plt.show()
 
 
 
