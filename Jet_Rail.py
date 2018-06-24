@@ -252,7 +252,13 @@ train_log_moving_avg_diff.dropna(inplace = True)
 test_stationarity(train_log_moving_avg_diff)
 # And from plot we can see that std is stable
 
+# Mean of the series is still fluctuating
+# Stabilize the mean by Shifting and subtracting the train values
 
+train_log_diff = Train_log - Train_log.shift(1)
+
+# remove the first nan value and plot the series
+test_stationarity(train_log_diff.dropna())
 
 
 
