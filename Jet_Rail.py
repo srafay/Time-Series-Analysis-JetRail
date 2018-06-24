@@ -5,7 +5,9 @@ from math import sqrt
 from statsmodels.tsa.api import SimpleExpSmoothing, Holt
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 from statsmodels.tsa.stattools import adfuller # for Dickey Fuller test
+from statsmodels.tsa.stattools import acf, pacf # for p,q in Arima Model
 from statsmodels.tsa.seasonal import seasonal_decompose 
+from statsmodels.tsa.arima_model import ARIMA
 import statsmodels.api as sm
 import numpy as np
 
@@ -293,11 +295,27 @@ train_log_decompose.dropna(inplace=True)
 test_stationarity(train_log_decompose[0], title='Stationarity of Residuals')
 
 
+# Forecasting the time series using Arima
 
+lag_acf = acf(train_log_diff.dropna(), nlags=25)
+lag_pacf = pacf(train_log_diff.dropna(), nlags=25, method='ols')
 
+# Finding the values of p and q for Arima Model
+plt.figure(figsize=(20,10))
+plt.plot(lag_acf)
+plt.axhline(y=0,linestyle='--',color='gray')
+plt.axhline(y=-1.96/np.sqrt(len(train_log_diff.dropna())),linestyle='--',color='gray')
+plt.axhline(y=1.96/np.sqrt(len(train_log_diff.dropna())),linestyle='--',color='gray')
+plt.title('Autocorrelation Function')
+plt.show()
 
-
-
+plt.figure(figsize=(20,10))
+plt.plot(lag_pacf)
+plt.axhline(y=0,linestyle='--',color='gray')
+plt.axhline(y=-1.96/np.sqrt(len(train_log_diff.dropna())),linestyle='--',color='gray')
+plt.axhline(y=1.96/np.sqrt(len(train_log_diff.dropna())),linestyle='--',color='gray')
+plt.title('Partial Autocorrelation Function')
+plt.show()
 
 
 
