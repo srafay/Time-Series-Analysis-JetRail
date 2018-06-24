@@ -4,6 +4,7 @@ from sklearn.metrics import mean_squared_error as MSE
 from math import sqrt
 from statsmodels.tsa.api import SimpleExpSmoothing, Holt
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
+from statsmodels.tsa.stattools import adfuller
 import statsmodels.api as sm
 import numpy as np
 
@@ -186,10 +187,62 @@ submission.to_csv("submissions/2.csv", index=False)
 
 
 
-# SARIMAX Model to predict time series
+# ARIMA Model to predict time series
 
-fit1 = sm.tsa.statespace.SARIMAX(np.asarray(train['Count']), order=(2, 1, 4),seasonal_order=(0,1,1,7)).fit()
-y_hat['Count'] = fit1.predict(start='2014-06-25 00:00:00', end="2014-9-25", dynamic=False)
+# Need to make the series stationary first
+# Use Dickey Fuller test to check stationarity of the series
+
+# Null Hypothesis: Time series is not stationary
+# If Test statistics < Critical value, reject Null Hypothesis
+
+def test_stationarity(timeseries):
+    
+    #Determing rolling statistics
+    rolmean = timeseries.rolling(center=False,window=24).mean() # 24 hours on each day
+    rolstd = timeseries.rolling(center=False,window=24).std()
+    
+    #Plot rolling statistics:
+    plt.figure(figsize=(20,10))
+    orig = plt.plot(timeseries, color='blue',label='Original')
+    mean = plt.plot(rolmean, color='red', label='Rolling Mean')
+    std = plt.plot(rolstd, color='green', label = 'Rolling Std')
+    plt.legend(loc='best')
+    plt.title('Rolling Mean & Standard Deviation')
+    plt.show(block=False)
+    
+    #Perform Dickey-Fuller test:
+    print ('Results of Dickey-Fuller Test:')
+    dftest = adfuller(timeseries, autolag='AIC')
+    dfoutput = pd.Series(dftest[0:4], index=['Test Statistic','p-value','#Lags Used','Number of Observations Used'])
+    for key,value in dftest[4].items():
+        dfoutput['Critical Value (%s)'%key] = value
+    print (dfoutput)
+
+
+test_stationarity(train['Count'])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
