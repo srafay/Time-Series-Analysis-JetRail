@@ -192,7 +192,7 @@ submission.to_csv("submissions/2.csv", index=False)
 # Null Hypothesis: Time series is not stationary
 # If Test statistics < Critical value, reject Null Hypothesis
 
-def test_stationarity(timeseries):
+def test_stationarity(timeseries, title='Rolling Mean & Standard Deviation'):
     
     #Determing rolling statistics
     rolmean = timeseries.rolling(center=False,window=24).mean() # 24 hours on each day
@@ -204,7 +204,7 @@ def test_stationarity(timeseries):
     mean = plt.plot(rolmean, color='red', label='Rolling Mean')
     std = plt.plot(rolstd, color='green', label = 'Rolling Std')
     plt.legend(loc='best')
-    plt.title('Rolling Mean & Standard Deviation')
+    plt.title(title)
     plt.show(block=False)
     
     #Perform Dickey-Fuller test:
@@ -284,6 +284,13 @@ plt.tight_layout()
 plt.show()
 
 
+# Check the stationarity of residuals
+
+train_log_decompose = pd.DataFrame(residual)
+train_log_decompose['date'] = Train_log.index
+train_log_decompose.set_index('date', inplace = True)
+train_log_decompose.dropna(inplace=True)
+test_stationarity(train_log_decompose[0], title='Stationarity of Residuals')
 
 
 
