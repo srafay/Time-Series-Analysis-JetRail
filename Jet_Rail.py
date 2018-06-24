@@ -247,10 +247,10 @@ train_log_moving_avg_diff = Train_log - moving_avg
 train_log_moving_avg_diff.dropna(inplace = True)
 
 # Since value of Test Statistics is very small compared to Critical Value
-# And from plot we can see that std is stable
 # Thus it means that the trend has almost been removed
 
-
+test_stationarity(train_log_moving_avg_diff)
+# And from plot we can see that std is stable
 
 
 
