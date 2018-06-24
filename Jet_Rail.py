@@ -230,6 +230,7 @@ Train_log = np.log(train['Count'])
 valid_log = np.log(valid['Count'])
 
 moving_avg = pd.rolling_mean(Train_log, 24)
+
 plt.figure(figsize=(20,10))
 plt.plot(train.Datetime, Train_log, label='log(train)')
 plt.plot(train.Datetime, moving_avg, color = 'red', label='Rolling_Mean(log(train))')
@@ -241,7 +242,13 @@ plt.show()
 
 train_log_moving_avg_diff = Train_log - moving_avg
 
+# The first 23 values in difference are Nan, drop them
 
+train_log_moving_avg_diff.dropna(inplace = True)
+
+# Since value of Test Statistics is very small compared to Critical Value
+# And from plot we can see that std is stable
+# Thus it means that the trend has almost been removed
 
 
 
