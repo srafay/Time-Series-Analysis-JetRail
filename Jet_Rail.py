@@ -222,6 +222,24 @@ def test_stationarity(timeseries):
 test_stationarity(train['Count'])
 
 
+# Since Test stats < Critical value, Series is stationary
+# But we can see the increasing trend, let's remove it first
+
+
+Train_log = np.log(train['Count'])
+valid_log = np.log(valid['Count'])
+
+moving_avg = pd.rolling_mean(Train_log, 24)
+plt.figure(figsize=(20,10))
+plt.plot(train.Datetime, Train_log, label='log(train)')
+plt.plot(train.Datetime, moving_avg, color = 'red', label='Rolling_Mean(log(train))')
+plt.legend(loc='best')
+plt.title('Transforming series by taking the log')
+plt.show()
+
+# Remove the increasing trend
+
+train_log_moving_avg_diff = Train_log - moving_avg
 
 
 
