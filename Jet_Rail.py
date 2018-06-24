@@ -121,7 +121,7 @@ plt.show()
 # Similar to SES but also takes trend into account
 
 # Visualize the trend in data
-sm.tsa.seasonal_decompose(np.asarray(train['Count']), freq=7).plot()
+sm.tsa.seasonal_decompose(np.asarray(train['Count']), freq=24).plot()
 result = sm.tsa.stattools.adfuller(train['Count'])
 plt.show()
 
@@ -130,7 +130,7 @@ plt.show()
 # Thus Holt's linear trend model will perform better than above methods
 
 fit1 = Holt(train['Count']).fit(smoothing_level = 0.1,smoothing_slope = 0.0001)
-y_hat['Count'] = fit1.forecast(len(valid))
+y_hat['Count'] = fit1.forecast(len(valid) + 1)
 
 # Calculate RMSE for Holt's Linear Trending Model
 rmse.loc[len(rmse)]="Holt's Linear Trend 0.0001", sqrt(MSE(valid.Count, y_hat.Count))
@@ -343,7 +343,9 @@ plt.legend(loc= 'best')
 plt.title("Validation Curve Using Auto Regression Model")
 plt.show()
 
-
+# Calculating RMSE using AR Model
+y_hat.Count = AR_predict[1:2232]
+rmse.loc[len(rmse)]="Auto Regression Model", sqrt(MSE(valid.Count, y_hat.Count))
 
 
 
