@@ -317,10 +317,10 @@ plt.title('Partial Autocorrelation Function')
 plt.show()
 
 # Make AR Model
-model = ARIMA(Train_log, order=(1, 1, 0))  # here the q value is zero since it is just the AR model
+model = ARIMA(train.Count, order=(1, 1, 0))  # here the q value is zero since it is just the AR model
 results_AR = model.fit(disp=-1)  
 plt.figure(figsize=(50,10))
-plt.plot(train_log_diff.dropna(), label='original')
+plt.plot(train.Count, label='original')
 plt.plot(results_AR.fittedvalues, color='red', label='predictions')
 plt.title('Predictions using Auto Regression Model')
 plt.legend(loc='best')
@@ -343,9 +343,52 @@ plt.legend(loc= 'best')
 plt.title("Validation Curve Using Auto Regression Model")
 plt.show()
 
-# Calculating RMSE using AR Model
-y_hat.Count = AR_predict[1:2232]
-rmse.loc[len(rmse)]="Auto Regression Model", sqrt(MSE(valid.Count, y_hat.Count))
+def check_prediction_diff(predict_diff, given_set):
+    predict_diff= predict_diff.cumsum().shift().fillna(0)
+    predict_base = pd.Series(np.ones(given_set.shape[0]) * np.log(given_set['Count']), index = given_set.index)
+    predict_log = predict_base.add(predict_diff,fill_value=0)
+    predict = np.exp(predict_log)
+    
+    plt.figure(figsize=(20,10))
+    plt.plot(given_set['Count'], label = "Given set")
+    plt.plot(predict, color = 'red', label = "Predict")
+    plt.legend(loc= 'best')
+    temp = np.sqrt(np.dot(predict, given_set['Count']))/given_set.shape[0]
+    plt.title('RMSE: ' + temp)
+    plt.show()
+    
+def check_prediction_log(predict_log, given_set):
+    predict = np.exp(predict_log)
+    plt.figure(figsize=(20,10))
+    plt.plot(given_set['Count'], label = "Given set")
+    plt.plot(predict, color = 'red', label = "Predict")
+    plt.legend(loc= 'best')
+    #plt.title('RMSE: %.4f'% (np.sqrt(np.dot(predict, given_set['Count']))/given_set.shape[0]))
+    plt.show()
+    
+check_prediction_diff(AR_predict, valid)
 
+plt.figure(figsize=(20,10))
+plt.plot(valid['Count'], label = "Given set")
+plt.plot(AR_predict, color = 'red', label = "Predict")
+plt.legend(loc= 'best')
+#plt.title('RMSE: %.4f'% (np.sqrt(np.dot(predict, given_set['Count']))/given_set.shape[0]))
+plt.show()
+
+for p in range(12):
+    for d in range(12):
+        for q in range(12):
+            try:
+                fit1 = sm.tsa.statespace.SARIMAX(train.Count, order=(p, d, q),seasonal_order=(0,1,1,7)).fit()
+                y_hat = fit1.predict(start=16055, end=18285, dynamic=True)
+                plt.figure(figsize=(50,20))
+                plt.plot( train['Count'], label='Train')
+                plt.plot(valid['Count'], label='Valid')
+                plt.plot(y_hat, label='SARIMA')
+                plt.title("p={}, d={}, q={}" .format(p,d,q))
+                plt.legend(loc='best')
+                plt.savefig("results/p={}, d={}, q={}" .format(p,d,q))
+            except:
+                continue
 
 
