@@ -375,20 +375,21 @@ plt.legend(loc= 'best')
 #plt.title('RMSE: %.4f'% (np.sqrt(np.dot(predict, given_set['Count']))/given_set.shape[0]))
 plt.show()
 
-for p in range(12):
-    for d in range(12):
-        for q in range(12):
-            try:
-                fit1 = sm.tsa.statespace.SARIMAX(train.Count, order=(p, d, q),seasonal_order=(0,1,1,7)).fit()
-                y_hat = fit1.predict(start=16055, end=18285, dynamic=True)
-                plt.figure(figsize=(50,20))
-                plt.plot( train['Count'], label='Train')
-                plt.plot(valid['Count'], label='Valid')
-                plt.plot(y_hat, label='SARIMA')
-                plt.title("p={}, d={}, q={}" .format(p,d,q))
-                plt.legend(loc='best')
-                plt.savefig("results/p={}, d={}, q={}" .format(p,d,q))
-            except:
-                continue
+def gridSearchSARIMAX():
+    for p in range(12):
+        for d in range(12):
+            for q in range(12):
+                try:
+                    fit1 = sm.tsa.statespace.SARIMAX(train.Count, order=(p, d, q),seasonal_order=(0,1,1,7)).fit()
+                    y_hat = fit1.predict(start=16055, end=18285, dynamic=True)
+                    plt.figure(figsize=(50,20))
+                    plt.plot( train['Count'], label='Train')
+                    plt.plot(valid['Count'], label='Valid')
+                    plt.plot(y_hat, label='SARIMA')
+                    plt.title("p={}, d={}, q={}" .format(p,d,q))
+                    plt.legend(loc='best')
+                    plt.savefig("results/p={}, d={}, q={}" .format(p,d,q))
+                except:
+                    continue
 
 
