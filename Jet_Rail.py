@@ -392,4 +392,13 @@ def gridSearchSARIMAX():
                 except:
                     continue
 
+# Calculate RMSE
+fit1 = sm.tsa.statespace.SARIMAX(train.Count, order=(3, 1, 2),seasonal_order=(0,1,1,7)).fit()
+y_hat = fit1.predict(start=16055, end=18285, dynamic=True)
+rmse.loc[len(rmse)]="SARIMAX 312", sqrt(MSE(valid.Count, y_hat))
+
+
+
+
+
 
