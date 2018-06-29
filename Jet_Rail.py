@@ -393,10 +393,20 @@ def gridSearchSARIMAX():
                     continue
 
 # Calculate RMSE
-fit1 = sm.tsa.statespace.SARIMAX(train.Count, order=(3, 1, 2),seasonal_order=(0,1,1,7)).fit()
+fit1 = sm.tsa.statespace.SARIMAX(train.Count, order=(3, 1, 2),seasonal_order=(0,1,1,7), enforce_stationarity=False, enforce_invertibility=False).fit()
 y_hat = fit1.predict(start=16055, end=18285, dynamic=True)
-rmse.loc[len(rmse)]="SARIMAX 312", sqrt(MSE(valid.Count, y_hat))
+rmse.loc[len(rmse)]="SARIMAX 312_", sqrt(MSE(valid.Count, y_hat))
 
+
+# Submission using SARIMAX Model 312
+submission=pd.read_csv("data/Sample_Submission_QChS6c3.csv")
+fit1 = sm.tsa.statespace.SARIMAX(train.Count, enforce_stationarity=False, enforce_invertibility=False, order=(3, 1, 2),seasonal_order=(0,1,1,7)).fit()
+predict = fit1.predict(start=18286, end=23397, dynamic=True)
+submission.Count = predict
+submission['ID'] = test['ID']
+
+# Converting the final submission to csv format
+submission.to_csv("submissions/5.csv", index=False)
 
 
 
