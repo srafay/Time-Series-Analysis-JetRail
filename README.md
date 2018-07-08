@@ -64,6 +64,28 @@
 	* Here the predictions are made on the basis of the average of last few points instead of taking all the previously known values
 	* We can take last 10, 20, 50, or any number of observations (depends on the data and intuition)
 	* <p align="center"><img src="https://i.imgur.com/hHEwDK7.png"></p>
+	
+3. **Simple Exponential Smoothing**
+	* In this technique, we assign larger weights to more recent observations than to observations from the distant past
+	* The weights decrease exponentially as observations come from further in the past
+	* The smallest weights are associated with the oldest observations
+		* If we give the entire weight to the last observed value only, this method will be similar to the naive approach
+		* So, we can say that naive approach is also a simple exponential smoothing technique where the entire weight is given to the last observed value
+	* <p align="center"><img src="https://i.imgur.com/oeBY2vI.png"></p>
+	
+4. **Holt's Linear Trend Model**
+	* It is an extension of simple exponential smoothing
+		* allows forecasting of data with a trend
+	* The forecast function in this method is a function of level and trend
+	* We can see an inclined line as the model has taken into consideration the trend of the time series
+	* <p align="center"><img src="https://i.imgur.com/6XfnWnu.png"></p>
+
+5. **Holt's Winter Model**
+	* Datasets which show a similar set of pattern after fixed intervals of a time period suffer from seasonality
+	* The above models don't take seasonality of dataset into account while forecasting
+	* Holt's Winter model takes seasonality into account while forecasting
+	* The idea behind Holt’s Winter is to apply exponential smoothing to the seasonal components in addition to level and trend
+	* <p align="center"><img src="https://i.imgur.com/fHHqjX1.png"></p>
 
 
 
