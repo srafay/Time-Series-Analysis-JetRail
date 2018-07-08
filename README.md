@@ -49,3 +49,25 @@
 
 
 ### Modeling Techniques
+* There can be different modeling techniques to forecast the time series
+
+1. **Naive Approach**
+	* We assume that the next expected point is equal to the last observed point
+	* So we can expect a straight horizontal line as the prediction
+	* <p align="center"><img src="https://i.imgur.com/tdoSDCq.png"></p>
+	* The blue line is the prediction here. All the predictions are equal to the last observed point
+	* Let’s make predictions using naive approach for the validation set
+	* <p align="center"><img src="https://i.imgur.com/I0aaHTo.png"></p>
+
+2. **Moving Average**
+	* In this technique we will take the average of the passenger counts for last few time periods
+	* Here the predictions are made on the basis of the average of last few points instead of taking all the previously known values
+	* We can take last 10, 20, 50, or any number of observations (depends on the data and intuition)
+	* <p align="center"><img src="https://i.imgur.com/hHEwDK7.png"></p>
+
+
+
+
+
+
+
