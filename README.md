@@ -132,7 +132,18 @@
 	* <p align="center"><img src="https://i.imgur.com/6zFsg2c.png"></p>
 	* We can use residuals for modeling and forecasting
 		* Residuals is the time series after removing trend and seasonality
-	
+
+* After making predictions with stationary series, we need to convert them back to original scale
+
+7. **SARIMAX Model**
+	* SARIMAX model takes into account the seasonality of the time series
+	* We need values of p, d and q for building this model
+		* p is the order of the autoregressive model(number of time lags)
+		* d is the degree of differencing(number of times the data have had past values subtracted)
+		* q is the order of moving average model
+	* We can find optimal parameters for the given series by Grid Searching
+	* After performing grid search on parameters, the model forecasts as follows:
+	* <p align="center"><img src="https://i.imgur.com/q8KnRmJ.png"></p>
 
 
 	
