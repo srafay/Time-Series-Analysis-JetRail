@@ -86,6 +86,56 @@
 	* Holt's Winter model takes seasonality into account while forecasting
 	* The idea behind Holt’s Winter is to apply exponential smoothing to the seasonal components in addition to level and trend
 	* <p align="center"><img src="https://i.imgur.com/fHHqjX1.png"></p>
+	
+6. **ARIMA Model**
+	* We have made different models for trend and seasonality
+	* ARIMA takes into account both trend and seasonality
+	* ARIMA stands for Auto Regression Integrated Moving Average
+	* We need to make timeseries stationary for ARIMA forecasting
+	* Dickey Fuller test can be used to test stationarity of time series
+		* The null hypothesis of the test is that time series is not stationary (has some time-dependent structure)
+		* The alternate hypothesis (rejecting the null hypothesis) is that the time series is stationary
+		* The test results comprise of a Test Statistic and some Critical Values for difference confidence levels
+		* If the ‘Test Statistic’ is less than the ‘Critical Value’, we can reject the null hypothesis and say that the series is stationary
+		* Available in statsmodels.tsa.stattools (python)
+		
+	6.1 **Removing Trend**
+	* A trend exists when there is a long-term increase or decrease in the data
+	* We see an increasing trend in the data
+	* So first we apply transformation which penalizes higher values more than smaller ones
+		* for example log transformation
+	* We will take rolling average here to stabilize the values
+	* <p align="center"><img src="https://i.imgur.com/1gVrHFq.png"></p>
+	* Values with blue line are the log of original values
+	* Values with red line are the rolling average of these log values
+	* We can see the increasing trend in the graph, we need to remove it to make the series stationary
+	* To remove the trend
+		* subtract the rolling average of series from the original values
+		* de_Trend = Train - rolling_mean(Train)
+	* <p align="center"><img src="https://i.imgur.com/2e67WbW.png"></p>
+		* As we can see that the increasing trend has been removed
+		
+	6.2 **Stabilizing mean**
+	* As we can see that the mean is not stable
+	* We need to stabilize the mean since it's also a requirement of a stationary time series
+	* Differencing can help to make the series stable and eliminate the trend
+		* train_log_diff = Train_log - Train_log.shift(1)
+	* <p align="center"><img src="https://i.imgur.com/M0dS5fb.png"></p>
+	
+	6.3 **Removing Seasonality**
+	* Seasonality means periodic fluctuations
+	* A seasonal pattern exists when a series is influenced by seasonal factors
+		* e.g. quarter of the year, the month, or day of the week
+	* Seasonality is always of a fixed and known period
+	* We can use seasonal_decompose to decompose our series into trend, seasonality, and residuals
+		* present in statsmodels.tsa.seasonal (python)
+	* <p align="center"><img src="https://i.imgur.com/6zFsg2c.png"></p>
+	* We can use residuals for modeling and forecasting
+		* Residuals is the time series after removing trend and seasonality
+	
+
+
+	
 
 
 
